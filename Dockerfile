@@ -16,7 +16,7 @@ RUN \
 	&& rpm --restore shadow-utils 2>/dev/null \
 	&& dnf -y install podman fuse-overlayfs --exclude container-selinux \
 	&& dnf -y install java-11-openjdk-headless \
-	&& dnf -y install git \
+	&& dnf -y install git podman-docker \
 	&& rm -rf /var/cache /var/log/dnf* /var/log/yum.* \
 	&& useradd jenkins \
 	&& mkdir /home/jenkins/.ssh \
