@@ -21,8 +21,8 @@ RUN \
 	&& useradd jenkins \
 	&& mkdir /home/jenkins/.ssh \
 	&& chown -R jenkins:jenkins /home/jenkins \
-	&& echo jenkins:100000:65536 >/etc/subuid \
-	&& echo jenkins:100000:65536 >/etc/subgid 
+	&& echo jenkins:100000:655360 >/etc/subuid \
+	&& echo jenkins:100000:655360 >/etc/subgid 
 
 # get jenkins agent - from https://github.com/jenkinsci/docker-agent
 RUN curl --create-dirs -fsSLo /usr/share/jenkins/agent.jar https://repo.jenkins-ci.org/public/org/jenkins-ci/main/remoting/${VERSION}/remoting-${VERSION}.jar \
@@ -43,8 +43,10 @@ RUN chmod 644 /etc/containers/containers.conf \
 	&& touch /var/lib/shared/overlay-images/images.lock \
 	&& touch /var/lib/shared/overlay-layers/layers.lock \
 	&& touch /var/lib/shared/vfs-images/images.lock \
-	&& touch /var/lib/shared/vfs-layers/layers.lock
+	&& touch /var/lib/shared/vfs-layers/layers.lock \
+	&& touch /etc/containers/nodocker
 
 RUN chmod 755 /entrypoint.sh
+USER jenkins
 
 ENTRYPOINT ["/entrypoint.sh"]

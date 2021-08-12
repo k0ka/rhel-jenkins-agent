@@ -5,8 +5,14 @@ Jenkins inboud agent based on Rocky Linux 8 and podman.
 
 To run a podman container
 
-    podman run --init ghcr.io/k0ka/rocky-jenkins-agent -url http://jenkins-server:port <secret> <agent name>
-  Note: `--init` is necessary for correct subprocesses handling (zombie reaping)
+	podman run 
+		--init
+		--user jenkins
+		--security-opt label=disable
+		--security-opt unmask=ALL
+		--device /dev/fuse 
+		ghcr.io/k0ka/rocky-jenkins-agent -url http://jenkins-server:port <secret> <agent name>
+  `--init` is necessary for correct subprocesses handling (zombie reaping). Other options are used to run container as rootless and bypass any restrictions to run podman inside.
 
 Optional environment variables:
 
