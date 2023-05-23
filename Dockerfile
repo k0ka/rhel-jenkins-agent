@@ -1,6 +1,6 @@
 FROM rockylinux/rockylinux 
 
-ARG VERSION=4.10
+ARG VERSION=4.14
 
 ENV \
 	SUMMARY="Platform for running Jenkins inbound agent with Podman-in-Podmain" \
@@ -14,7 +14,7 @@ LABEL maintainer="admin@idwrx.com" \
 RUN \
 	dnf -y update \
 	&& rpm --restore shadow-utils 2>/dev/null \
-	&& dnf -y install podman fuse-overlayfs --exclude container-selinux \
+	&& dnf -y install podman fuse-overlayfs crun --exclude container-selinux \
 	&& dnf -y install java-11-openjdk-headless \
 	&& dnf -y install git podman-docker \
 	&& rm -rf /var/cache /var/log/dnf* /var/log/yum.* \
