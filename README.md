@@ -11,7 +11,7 @@ To run a rootless podman container
       --security-opt label=disable
       --security-opt unmask=ALL
       --device /dev/fuse 
-      ghcr.io/k0ka/rocky-jenkins-agent -url http://jenkins-server:port <secret> <agent name>
+      ghcr.io/k0ka/rhel-jenkins-agent -url http://jenkins-server:port <secret> <agent name>
   `--init` is necessary for correct subprocesses handling (zombie reaping). Other options are used to run container as rootless and bypass any restrictions to run podman inside.
   
 Easier but less secure way is to run with `--privileged` flag
@@ -19,7 +19,7 @@ Easier but less secure way is to run with `--privileged` flag
     podman run 
       --init
       --privileged 
-      ghcr.io/k0ka/rocky-jenkins-agent -url http://jenkins-server:port <secret> <agent name>
+      ghcr.io/k0ka/rhel-jenkins-agent -url http://jenkins-server:port <secret> <agent name>
 
 Optional environment variables:
 
