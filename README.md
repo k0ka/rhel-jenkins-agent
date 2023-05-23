@@ -1,4 +1,4 @@
-# rocky-jenkins-agent
+# rhel-jenkins-agent
 Jenkins inboud agent based on Rocky Linux 8 and podman.
 
 ## Running
