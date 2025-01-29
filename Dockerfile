@@ -1,6 +1,6 @@
 FROM rockylinux/rockylinux 
 
-ARG VERSION=4.14
+ARG VERSION=3283.v92c105e0f819
 
 ENV \
 	SUMMARY="Platform for running Jenkins inbound agent with Podman-in-Podmain" \
