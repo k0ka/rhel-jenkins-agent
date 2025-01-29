@@ -1,6 +1,7 @@
 FROM rockylinux/rockylinux 
 
 ARG VERSION=3283.v92c105e0f819
+ARG JAVA_VERSION=21
 
 ENV \
 	SUMMARY="Platform for running Jenkins inbound agent with Podman-in-Podmain" \
@@ -15,7 +16,7 @@ RUN \
 	dnf -y update \
 	&& rpm --restore shadow-utils 2>/dev/null \
 	&& dnf -y install podman fuse-overlayfs crun --exclude container-selinux \
-	&& dnf -y install java-11-openjdk-headless \
+	&& dnf -y install java-${JAVA_VERSION}-openjdk-headless \
 	&& dnf -y install git podman-docker \
 	&& rm -rf /var/cache /var/log/dnf* /var/log/yum.* \
 	&& useradd jenkins \
