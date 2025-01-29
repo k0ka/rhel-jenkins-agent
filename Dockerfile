@@ -1,7 +1,4 @@
-FROM rockylinux/rockylinux 
-
-ARG VERSION=3283.v92c105e0f819
-ARG JAVA_VERSION=21
+FROM jenkins/inbound-agent:latest-rhel-ubi9
 
 ENV \
 	SUMMARY="Platform for running Jenkins inbound agent with Podman-in-Podmain" \
@@ -12,30 +9,21 @@ LABEL maintainer="admin@idwrx.com" \
 	description="${DESCRIPTION}" \
 	name="idwrx/rocky-jenkins-agent"
 
+USER root
 RUN \
 	dnf -y update \
 	&& rpm --restore shadow-utils 2>/dev/null \
+    && dnf -y remove selinux-policy \
 	&& dnf -y install podman fuse-overlayfs crun --exclude container-selinux \
-	&& dnf -y install java-${JAVA_VERSION}-openjdk-headless \
 	&& dnf -y install git podman-docker \
 	&& rm -rf /var/cache /var/log/dnf* /var/log/yum.* \
-	&& useradd jenkins \
 	&& mkdir /home/jenkins/.ssh \
-	&& chown -R jenkins:jenkins /home/jenkins \
+	&& chown -R jenkins:jenkins /home/jenkins/.ssh \
 	&& echo jenkins:100000:655360 >/etc/subuid \
 	&& echo jenkins:100000:655360 >/etc/subgid 
 
-# get jenkins agent - from https://github.com/jenkinsci/docker-agent
-RUN curl --create-dirs -fsSLo /usr/share/jenkins/agent.jar https://repo.jenkins-ci.org/public/org/jenkins-ci/main/remoting/${VERSION}/remoting-${VERSION}.jar \
-  && chmod 755 /usr/share/jenkins \
-  && chmod 644 /usr/share/jenkins/agent.jar \
-  && ln -sf /usr/share/jenkins/agent.jar /usr/share/jenkins/slave.jar
-
 # from https://www.redhat.com/sysadmin/podman-inside-container
 COPY ./containers.conf /etc/containers/containers.conf
-
-# from https://github.com/jenkinsci/docker-ssh-agent/blob/master/setup-sshd
-COPY ./entrypoint.sh /entrypoint.sh
 
 # chmod containers.conf and adjust storage.conf to enable Fuse storage.
 RUN chmod 644 /etc/containers/containers.conf \
@@ -47,7 +35,4 @@ RUN chmod 644 /etc/containers/containers.conf \
 	&& touch /var/lib/shared/vfs-layers/layers.lock \
 	&& touch /etc/containers/nodocker
 
-RUN chmod 755 /entrypoint.sh
 USER jenkins
-
-ENTRYPOINT ["/entrypoint.sh"]
