@@ -1,4 +1,4 @@
-FROM jenkins/inbound-agent:latest-rhel-ubi9
+FROM jenkins/inbound-agent:latest-rhel-ubi9-jdk25
 
 ENV \
 	SUMMARY="Platform for running Jenkins inbound agent with Podman-in-Podmain" \
